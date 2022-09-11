@@ -12,11 +12,11 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public User registerUser(User user){ //등록
+    public User registerUser(User user){ // 회원 등록
         return userRepository.registerUser(user);
     }
 
-    public List<User> findUserAll(){ //전체 조회
+    public List<User> findUserAll(){ // 전체 조회
         return userRepository.findUserAll();
     }
 
@@ -24,11 +24,11 @@ public class UserService {
         return userRepository.findUserOne(id);
     }
 
-    public void deleteUser(String id){ //삭제
+    public void deleteUser(String id){ // 회원 삭제
         userRepository.deleteUser(id);
     }
 
-    public void modifyUser(String id, User user) { //수정
+    public void modifyUser(String id, User user) { // 회원 정보 수정
         userRepository.modifyUser(id, user);
 
     }
