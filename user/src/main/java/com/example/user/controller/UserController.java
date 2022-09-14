@@ -1,6 +1,8 @@
 package com.example.user.controller;
 
-import com.example.user.domain.User;
+import com.example.user.dto.UpdateUserDto;
+import com.example.user.dto.UserInfoDto;
+import com.example.user.dto.UserRegisterDto;
 import com.example.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,38 +10,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/user")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    //회원 등록
-    @PostMapping("/user")
-    public User registerUser(@RequestBody User user) { 
-        return userService.registerUser(user);
+    @PostMapping("")
+    public void registerUser(@RequestBody UserRegisterDto userRegisterDto) throws Exception { //등록
+        userService.registerUser(userRegisterDto);
     }
 
-//회원 조회
-    @GetMapping("/user")
-    public List<User> findUserAll(){ 
+    @GetMapping("")
+    public List<UserInfoDto> findUserAll(){ //전체 조회
         return userService.findUserAll();
     }
 
-//회원 상세 조회
-    @GetMapping("/user/{id}")
-    public User findUserOne(@PathVariable("id") String id){ 
+    @GetMapping("/{id}")
+    public UserInfoDto findUserOne(@PathVariable("id") String id){ //개별 조회
         return userService.findUserOne(id);
     }
 
-//회원 삭제
-    @DeleteMapping("/user/{id}")
-    public void deleteUser(@PathVariable String id) { 
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable String id) { //삭제
         userService.deleteUser(id);
     }
 
-//회원 정보 수정
-    @PutMapping("/user/{id}")
-    public User modifyUser(@PathVariable String id, @RequestBody User user) { 
-        userService.modifyUser(id, user);
+    @PutMapping("/{id}")
+    public UserInfoDto modifyUser(@PathVariable String id, @RequestBody UpdateUserDto updateUserDto) { //수정
+        userService.modifyUser(id, updateUserDto);
         return userService.findUserOne(id);
     }
 }
