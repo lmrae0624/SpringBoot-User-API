@@ -1,6 +1,6 @@
 package com.example.user.dto;
 
-import com.assign.domain.User;
+import com.example.user.domain.User;
 import lombok.Getter;
 
 @Getter
