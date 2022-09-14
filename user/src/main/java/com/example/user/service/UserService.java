@@ -1,6 +1,9 @@
 package com.example.user.service;
 
 import com.example.user.domain.User;
+import com.example.user.dto.UpdateUserDto;
+import com.example.user.dto.UserInfoDto;
+import com.example.user.dto.UserRegisterDto;
 import com.example.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,24 +15,30 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public User registerUser(User user){ // 회원 등록
-        return userRepository.registerUser(user);
+    public void registerUser(UserRegisterDto userRegisterDto) throws Exception{ //등록
+        User user = userRegisterDto.toEntity();
+
+        if(!userRepository.findByUserName(userRegisterDto.getUsername()).isEmpty()){
+            throw new Exception("이미 존재하는 아이디입니다.");
+        }
+        userRepository.registerUser(user);
     }
 
-    public List<User> findUserAll(){ // 전체 조회
+    public List<UserInfoDto> findUserAll(){ //전체 조회;
         return userRepository.findUserAll();
     }
 
-    public User findUserOne(String id){ //개별 조회
-        return userRepository.findUserOne(id);
+    public UserInfoDto findUserOne(String id){ //개별 조회
+        return new UserInfoDto(userRepository.findUserOne(id));
     }
 
-    public void deleteUser(String id){ // 회원 삭제
+    public void deleteUser(String id){ //삭제
         userRepository.deleteUser(id);
     }
 
-    public void modifyUser(String id, User user) { // 회원 정보 수정
-        userRepository.modifyUser(id, user);
+    public void modifyUser(String id, UpdateUserDto updateUserDto) { //수정
+        userRepository.modifyUser(id, updateUserDto);
 
     }
 }
+
