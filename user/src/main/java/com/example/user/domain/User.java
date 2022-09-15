@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -15,7 +17,7 @@ public class User {
     private String username; //아이디
     private String password; //비밀번호
     private String name;    //이름
-    private String birth;   //생년월일
+    private Date birth;   //생년월일
 
 }
 
