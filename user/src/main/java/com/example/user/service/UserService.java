@@ -18,7 +18,7 @@ public class UserService {
     public void inputUser(InputUserDto inputUserDto) throws Exception{ //등록
         User user = inputUserDto.toEntity();
 
-        if(userRepository.findByUsername(inputUserDto.getUsername())){
+        if(userRepository.findByUsername(inputUserDto.getUsername())){ //아이디 중복 확인
             throw new Exception("이미 존재하는 아이디입니다.");
         }
         userRepository.save(user);
