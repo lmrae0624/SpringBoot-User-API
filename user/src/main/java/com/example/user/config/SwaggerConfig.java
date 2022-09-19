@@ -28,13 +28,13 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("회원 API")
-                .description("회원 API 입니다")
+                .title("User API")
+                .description("회원 관리 API 입니다")
                 .version("0.8.0")
-                //.license("LICENSE")
-                .licenseUrl("")
+//                .license("LICENSE")
+//                .licenseUrl("")
                 .build();
-    }
 
+    }
     // http://localhost:8080/swagger-ui.html
 }
