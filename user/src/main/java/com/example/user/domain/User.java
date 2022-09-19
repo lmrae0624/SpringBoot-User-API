@@ -17,7 +17,9 @@ public class User {
     private String username; //아이디
     private String password; //비밀번호
     private String name;    //이름
-    private Date birth;   //생년월일
+    private Date birth;     //생년월일
+    private Date regDate;   //회원 가입 날짜
+
 
 }
 
