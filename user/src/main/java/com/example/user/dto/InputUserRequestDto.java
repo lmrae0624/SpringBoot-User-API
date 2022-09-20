@@ -3,6 +3,7 @@ package com.example.user.dto;
 import com.example.user.domain.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
-@Setter
+@Setter @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class InputUserRequestDto {

@@ -20,7 +20,6 @@ public class UserRepository {
 
     private static Map<String, User> users; //회원 정보
     private static Long id; //pk
-//    private static LocalDate now; //오늘 날짜
 
     static { //test용
         users = new HashMap<String,User>();
@@ -39,15 +38,17 @@ public class UserRepository {
     }
 
 
-    public void save(User user){ //등록
+    public User save(User user){ //등록
         // pk 설정
         user.setId(++id);
-
         // 회원 가입 날짜 = 오늘 날짜
         user.setRegDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
 
         users.put(id.toString(), user);
+
+        return findById(id.toString());
     }
+
 
     public Boolean findByUsername(String username){ //중복 아이디 조회
         for(User user : users.values()) {

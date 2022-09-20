@@ -1,5 +1,6 @@
 package com.example.user.dto;
 
+import com.example.user.exception.common.ErrorResponse;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,11 +9,11 @@ import lombok.Setter;
 public class ResultResponse<T> {
     private final boolean success;
     private final T response;
-    private final ExceptionResponse exceptionResponse;
+    private final ErrorResponse errorResponse;
 
-    public ResultResponse(boolean success, T response, ExceptionResponse exceptionResponse) {
+    public ResultResponse(boolean success, T response, ErrorResponse errorResponse) {
         this.success = success;
         this.response = response;
-        this.exceptionResponse = exceptionResponse;
+        this.errorResponse = errorResponse;
     }
 }
