@@ -8,6 +8,7 @@ import com.example.user.response.ResponseUtil;
 import com.example.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +24,11 @@ public class UserController {
 
     private final UserService userService;
 
-
     @ApiOperation(value = "회원 등록", notes = "회원을 등록합니다.")
+    @ApiImplicitParam(name = "inputUserRequestDto", value = "회원 등록 정보", required = true)
     @PostMapping("")
     public ApiResponse inputUser(@Valid @RequestBody InputUserRequestDto inputUserRequestDto)  { //등록
+        System.out.println("controller"+inputUserRequestDto);
         return userService.inputUser(inputUserRequestDto);
     }
 
@@ -55,10 +57,12 @@ public class UserController {
 
     // 회원 수정
     @ApiOperation(value = "회원 수정", notes = "회원 번호를 입력시 해당 회원의 정보를 수정합니다.")
-    @ApiImplicitParam(name="id", value="회원 번호", required = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="id", value="회원 번호", required = true),
+            @ApiImplicitParam(name = "updateUserRequestDto", value = "회원 수정 정보", required = true)})
     @PutMapping("/{id}")
     public ApiResponse modifyUser(@PathVariable String id, @Valid @RequestBody UpdateUserRequestDto updateUserRequestDto) {
-        return  userService.modifyUser(id, updateUserRequestDto);
+        return userService.modifyUser(id, updateUserRequestDto);
     }
-
 }
+

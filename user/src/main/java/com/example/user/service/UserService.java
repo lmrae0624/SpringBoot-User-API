@@ -21,9 +21,10 @@ public class UserService {
     // 회원 등록
     public ApiResponse inputUser(InputUserRequestDto inputUserRequestDto) {
         User user = inputUserRequestDto.toEntity();
-
+        System.out.println("test"+user);
         // 아이디 중복 검사
         if(userRepository.findByUsername(inputUserRequestDto.getUsername())){
+            //throw new UserException(ErrorCode.NOT_FOUND);
             return ResponseUtil.error(ErrorCode.USERNAME_DUPLICATION);
         }
         return ResponseUtil.success(userRepository.save(user));

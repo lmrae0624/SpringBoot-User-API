@@ -1,6 +1,7 @@
 package com.example.user.dto;
 
 import com.example.user.domain.User;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.Date;
 @Setter @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(value="회원 정보", description = "회원 등록시 필요한 정보입니다.")
 public class InputUserRequestDto {
 
     @ApiModelProperty(
