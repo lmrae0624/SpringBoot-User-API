@@ -1,6 +1,5 @@
 package com.example.user.dto;
 
-import com.example.user.exception.common.ErrorResponse;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,12 +8,11 @@ import lombok.Setter;
 public class ApiResponse<T> {
     private final int status;
     private final T data;
-    private final ErrorResponse errorResponse;
+   // private final ErrorResponse errorResponse;
 
-    public ApiResponse(int status , T data, ErrorResponse errorResponse) {
+    public ApiResponse(int status , T data) {
         this.status = status;
         this.data = data;
-        this.errorResponse = errorResponse;
     }
 
 }

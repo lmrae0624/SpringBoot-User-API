@@ -27,9 +27,11 @@ public class UserController {
     @ApiOperation(value = "회원 등록", notes = "회원을 등록합니다.")
     @ApiImplicitParam(name = "inputUserRequestDto", value = "회원 등록 정보", required = true)
     @PostMapping("")
-    public ApiResponse inputUser(@Valid @RequestBody InputUserRequestDto inputUserRequestDto)  { //등록
-        System.out.println("controller"+inputUserRequestDto);
-        return userService.inputUser(inputUserRequestDto);
+    public ApiResponse inputUser(@RequestBody InputUserRequestDto inputUserRequestDto) { //등록
+        if (inputUserRequestDto.getPassword() == null) {
+            throw new UserException("aaa");
+        }
+        return inputUserRequestDto.getPassword().orElseThrow(() -> new UserException("aaa"));
     }
 
     // 회원 전체 조회

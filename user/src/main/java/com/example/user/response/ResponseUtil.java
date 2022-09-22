@@ -7,11 +7,11 @@ import com.example.user.exception.common.ErrorCode;
 public class ResponseUtil<T> {
 
     public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>(200, data,null);
+        return new ApiResponse<>(200, data);
     }
 
     public static ApiResponse<?> error(ErrorCode errorCode){
-        return new ApiResponse<>(errorCode.getStatus(), null, new ErrorResponse(errorCode.getCode(), errorCode.getMessage()));
+        return new ApiResponse<>(errorCode.getStatus(), null);
     }
 
 }
