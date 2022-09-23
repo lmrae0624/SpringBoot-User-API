@@ -8,8 +8,7 @@ import lombok.Setter;
 public class ApiResponse<T> {
     private final int status;
     private final T data;
-   // private final ErrorResponse errorResponse;
-
+    
     public ApiResponse(int status , T data) {
         this.status = status;
         this.data = data;

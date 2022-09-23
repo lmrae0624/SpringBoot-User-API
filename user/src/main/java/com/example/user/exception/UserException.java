@@ -1,27 +1,26 @@
 package com.example.user.exception;
 
+import com.example.user.exception.common.ErrorCode;
 import lombok.Getter;
 
 @Getter
 //@AllArgsConstructor
 public class UserException extends RuntimeException {
-    //선택한 생성자가 자동으로 생성되었습니다. 각 생성자는 RuntimeException생성자를 호출하는 Super()함수를 호출하고 있습니다.
-    public UserException() {
-    }
 
-    public UserException(String message) {
+    private ErrorCode errorCode;
+
+    public UserException(String message, ErrorCode errorCode) {
         super(message);
+        this.errorCode = errorCode;
     }
 
-    public UserException(String message, Throwable cause) {
-        super(message, cause);
+    public UserException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 
-    public UserException(Throwable cause) {
-        super(cause);
-    }
-
-    public UserException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public ErrorCode getErrorCode() {
+        return this.errorCode;
     }
 }
+

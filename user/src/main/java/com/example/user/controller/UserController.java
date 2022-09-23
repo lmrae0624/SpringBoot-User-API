@@ -24,28 +24,26 @@ public class UserController {
 
     private final UserService userService;
 
+    // 회원 등록
     @ApiOperation(value = "회원 등록", notes = "회원을 등록합니다.")
     @ApiImplicitParam(name = "inputUserRequestDto", value = "회원 등록 정보", required = true)
     @PostMapping("")
-    public ApiResponse inputUser(@RequestBody InputUserRequestDto inputUserRequestDto) { //등록
-        if (inputUserRequestDto.getPassword() == null) {
-            throw new UserException("aaa");
-        }
-        return inputUserRequestDto.getPassword().orElseThrow(() -> new UserException("aaa"));
+    public ApiResponse inputUser(@RequestBody @Valid InputUserRequestDto inputUserRequestDto)  {
+        return userService.inputUser(inputUserRequestDto);
     }
 
     // 회원 전체 조회
     @ApiOperation(value = "회원 목록 전체 조회", notes = "전체 회원 정보를 조회합니다.")
     @GetMapping("")
     public ApiResponse<List<FindUserResponseDto>> findUserAll(){
-        return ResponseUtil.success(userService.findUserAll());
+        return userService.findUserAll();
     }
 
     // 회원 개별 조회
     @ApiOperation(value = "회원 상세 조회", notes = "회원 번호를 입력시 해당 회원의 상세 정보를 조회합니다.")
     @ApiImplicitParam(name="id", value="회원 번호", required = true)
     @GetMapping("/{id}")
-    public ApiResponse findUserOne(@PathVariable("id") String id) {
+    public ApiResponse findUserOne(@PathVariable("id") Long id) {
         return userService.findUserOne(id);
     }
 
@@ -53,7 +51,7 @@ public class UserController {
     @ApiOperation(value = "회원 삭제", notes = "회원 번호를 입력시 해당 회원의 정보를 삭제합니다.")
     @ApiImplicitParam(name="id", value="회원 번호", required = true)
     @DeleteMapping("/{id}")
-    public ApiResponse deleteUser(@PathVariable String id) {
+    public ApiResponse deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);
     }
 
@@ -63,8 +61,7 @@ public class UserController {
             @ApiImplicitParam(name="id", value="회원 번호", required = true),
             @ApiImplicitParam(name = "updateUserRequestDto", value = "회원 수정 정보", required = true)})
     @PutMapping("/{id}")
-    public ApiResponse modifyUser(@PathVariable String id, @Valid @RequestBody UpdateUserRequestDto updateUserRequestDto) {
+    public ApiResponse modifyUser(@PathVariable Long id, @RequestBody @Valid UpdateUserRequestDto updateUserRequestDto) {
         return userService.modifyUser(id, updateUserRequestDto);
     }
 }
-

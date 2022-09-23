@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
 @ApiModel(value="회원 정보", description = "회원 수정이 가능한 정보입니다.")
@@ -22,7 +23,7 @@ public class UpdateUserRequestDto {
             value = "비밀번호",
             dataType = "String",
             example = "password123")
-    @Size(min=8, message = "비밀번호를 8자 이상 입력해주세요")
+    @Pattern(regexp = "[0-9a-z]{8,20}", message = "비밀번호를 영문 소문자, 숫자를 사용하여 8자 이상 20자 이하로 입력해주세요.")
     private String password; //비밀번호
 
     @ApiModelProperty(

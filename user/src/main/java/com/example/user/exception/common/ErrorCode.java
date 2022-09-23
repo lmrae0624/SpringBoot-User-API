@@ -6,8 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-    NOT_FOUND(404,"USER-001","없는 회원 번호 입니다."),
-    USERNAME_DUPLICATION(400,"USER-002","이미 사용중인 아이디입니다."),
+    NOT_FOUND(404,"USER-005", "존재하지 않는 회원입니다."),
+    USERNAME_DUPLICATION(400,"USER-006","이미 사용중인 아이디입니다."),
+
     ;
 
     private int status;

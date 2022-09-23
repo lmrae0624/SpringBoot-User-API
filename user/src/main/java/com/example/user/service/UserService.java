@@ -5,6 +5,7 @@ import com.example.user.dto.ApiResponse;
 import com.example.user.dto.FindUserResponseDto;
 import com.example.user.dto.InputUserRequestDto;
 import com.example.user.dto.UpdateUserRequestDto;
+import com.example.user.exception.UserException;
 import com.example.user.exception.common.ErrorCode;
 import com.example.user.repository.UserRepository;
 import com.example.user.response.ResponseUtil;
@@ -12,58 +13,49 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
+
 
     // 회원 등록
     public ApiResponse inputUser(InputUserRequestDto inputUserRequestDto) {
-        User user = inputUserRequestDto.toEntity();
-        System.out.println("test"+user);
         // 아이디 중복 검사
-        if(userRepository.findByUsername(inputUserRequestDto.getUsername())){
-            //throw new UserException(ErrorCode.NOT_FOUND);
-            return ResponseUtil.error(ErrorCode.USERNAME_DUPLICATION);
+        if (userRepository.existsByUsername(inputUserRequestDto.getUsername())) {
+            throw new UserException(ErrorCode.USERNAME_DUPLICATION);
         }
-        return ResponseUtil.success(userRepository.save(user));
+        return ResponseUtil.success(userRepository.save(inputUserRequestDto.toEntity()));
     }
 
     // 회원 전체 조회
-    public List<FindUserResponseDto> findUserAll(){
-        return userRepository.findAll();
+    public ApiResponse<List<FindUserResponseDto>> findUserAll() {
+        return ResponseUtil.success(userRepository.findAll()
+                .stream().map(FindUserResponseDto::new).collect(Collectors.toList()));
     }
 
     // 회원 개별 조회
-    public ApiResponse findUserOne(String id) {
-        User user=userRepository.findById(id);
-
-        if(user==null){
-            return ResponseUtil.error(ErrorCode.NOT_FOUND);
-        }
+    public ApiResponse findUserOne(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserException(ErrorCode.NOT_FOUND));
         return ResponseUtil.success(new FindUserResponseDto(user));
     }
 
     // 회원 삭제
-    public ApiResponse deleteUser(String id){
-        User user=userRepository.findById(id);
+    public ApiResponse deleteUser(Long id) {
+        userRepository.findById(id).orElseThrow(() -> new UserException(ErrorCode.NOT_FOUND));
 
-        if(user==null){
-            return ResponseUtil.error(ErrorCode.NOT_FOUND);
-        }
         userRepository.deleteById(id);
         return ResponseUtil.success(null);
     }
 
     // 회원 수정
-    public ApiResponse modifyUser(String id, UpdateUserRequestDto updateUserRequestDto) {
-        User user=userRepository.findById(id);
+    public ApiResponse modifyUser(Long id, UpdateUserRequestDto updateUserRequestDto) {
+        userRepository.findById(id).orElseThrow(() -> new UserException(ErrorCode.NOT_FOUND));
 
-        if(user==null){
-            return ResponseUtil.error(ErrorCode.NOT_FOUND);
-        }
-        userRepository.updateUser(id, updateUserRequestDto);
+        //userRepository.updateUser(id, updateUserRequestDto.toEntity());
         return findUserOne(id);
     }
 }
