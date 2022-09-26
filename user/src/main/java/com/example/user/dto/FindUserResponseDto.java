@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 @Getter
@@ -39,7 +40,7 @@ public class FindUserResponseDto {
             dataType = "Date",
             example = "1900-01-01")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="Asia/Seoul")
-    private Date birth;   //생년월일
+    private Timestamp birth;   //생년월일
 
     @ApiModelProperty(
             value = "가입날짜",
@@ -47,7 +48,7 @@ public class FindUserResponseDto {
             example = "2000-01-01",
             required = true)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private LocalDateTime regDate;   //회원 가입 날짜
+    private Timestamp regDate;   //회원 가입 날짜
 
     public FindUserResponseDto(User user){
         this.id = user.getId();
@@ -58,4 +59,3 @@ public class FindUserResponseDto {
         this.regDate = user.getRegDate();
     }
 }
-

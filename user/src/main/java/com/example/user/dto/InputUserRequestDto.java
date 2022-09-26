@@ -13,8 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.sql.Timestamp;
 @ApiModel(value="회원 정보", description = "회원 등록시 필요한 정보입니다.")
 @Getter
 @Setter
@@ -51,14 +50,14 @@ public class InputUserRequestDto {
             dataType = "Date",
             example = "1900-01-01")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date birth;   //생년월일
+    private Timestamp birth;   //생년월일
     @ApiModelProperty(
             value = "생년월일",
             dataType = "Date",
             example = "1900-01-01")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @CreatedDate
-    private LocalDateTime regDate;   //생년월일
+    private Timestamp regDate;   //생년월일
 
 
     public User toEntity() {
