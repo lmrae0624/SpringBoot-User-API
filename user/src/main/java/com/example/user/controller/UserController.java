@@ -4,7 +4,6 @@ import com.example.user.dto.ApiResponse;
 import com.example.user.dto.FindUserResponseDto;
 import com.example.user.dto.InputUserRequestDto;
 import com.example.user.dto.UpdateUserRequestDto;
-import com.example.user.response.ResponseUtil;
 import com.example.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,28 +23,28 @@ public class UserController {
 
     private final UserService userService;
 
-    // 회원 등록
     @ApiOperation(value = "회원 등록", notes = "회원을 등록합니다.")
     @ApiImplicitParam(name = "inputUserRequestDto", value = "회원 등록 정보", required = true)
     @PostMapping("")
-    public ApiResponse inputUser(@RequestBody @Valid InputUserRequestDto inputUserRequestDto)  {
-        return userService.inputUser(inputUserRequestDto);
+    public ApiResponse addUser(@RequestBody @Valid InputUserRequestDto inputUserRequestDto)  {
+        return userService.addUser(inputUserRequestDto);
     }
 
     // 회원 전체 조회
     @ApiOperation(value = "회원 목록 전체 조회", notes = "전체 회원 정보를 조회합니다.")
     @GetMapping("")
-    public ApiResponse<List<FindUserResponseDto>> findUserAll(){
-        return userService.findUserAll();
+    public ApiResponse<List<FindUserResponseDto>> getUserAll(){
+        return userService.getUserAll();
     }
 
     // 회원 개별 조회
     @ApiOperation(value = "회원 상세 조회", notes = "회원 번호를 입력시 해당 회원의 상세 정보를 조회합니다.")
     @ApiImplicitParam(name="id", value="회원 번호", required = true)
     @GetMapping("/{id}")
-    public ApiResponse findUserOne(@PathVariable("id") Long id) {
-        return userService.findUserOne(id);
+    public ApiResponse getUserOne(@PathVariable("id") Long id) {
+        return userService.getUserOne(id);
     }
+
 
     // 회원 삭제
     @ApiOperation(value = "회원 삭제", notes = "회원 번호를 입력시 해당 회원의 정보를 삭제합니다.")
