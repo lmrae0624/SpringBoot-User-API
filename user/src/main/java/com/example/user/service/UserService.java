@@ -7,6 +7,7 @@ import com.example.user.dto.InputUserRequestDto;
 import com.example.user.dto.UpdateUserRequestDto;
 import com.example.user.exception.UserException;
 import com.example.user.exception.common.ErrorCode;
+import com.example.user.mapper.UserMapper;
 import com.example.user.repository.UserRepository;
 import com.example.user.response.ResponseUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class UserService {
         if(userRepository.existsByUsername(inputUserRequestDto.getUsername())){
             throw new UserException(ErrorCode.USERNAME_DUPLICATION);
         }
-        return ResponseUtil.success(userRepository.save(inputUserRequestDto.toEntity()));
+        return ResponseUtil.success(userRepository.save(UserMapper.instance.inputUserRequestDtoToEntity(inputUserRequestDto)));
     }
 
     // 회원 전체 조회

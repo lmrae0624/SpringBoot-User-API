@@ -47,17 +47,18 @@ public class InputUserRequestDto {
     private String name;    //이름
     @ApiModelProperty(
             value = "생년월일",
-            dataType = "Date",
+            dataType = "Timestamp",
             example = "1900-01-01")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Timestamp birth;   //생년월일
     @ApiModelProperty(
-            value = "생년월일",
-            dataType = "Date",
+            value = "가입날짜",
+            dataType = "Timestamp",
             example = "1900-01-01")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @CreatedDate
-    private Timestamp regDate;   //생년월일
+    private Timestamp regDate;   //가입날짜
+
 
 
     public User toEntity() {
