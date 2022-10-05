@@ -27,6 +27,11 @@ spring:
         format_sql: true #To beautify or pretty print the SQL
         show_sql: true #실행되는 쿼리문 보여주기 여부
 
+  profiles:
+    include: jwt #이렇게 해서 jwt 관련된 설정은 application-jwt에서 설정해주도록 하겠습니다.
+
+  jwt:
+    secretKey: test
 
 logging:
   level:
@@ -34,3 +39,10 @@ logging:
     org.hibernate:
       type.descriptor.sql: trace #show parameter binding
       SQL: DEBUG
+
+jwt:
+  header: Authorization # JWT를 검증하는데 필요한 정보
+  #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
+  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK # Secret Key 를 Base64 로 인코딩한 값
+  token-validity-in-seconds: 86400 #토큰의 만료시간을 지정함 (단위는 초)

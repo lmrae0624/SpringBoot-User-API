@@ -1,38 +1,42 @@
 package com.example.user.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Builder
-@Data
+@Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Builder
 @EntityListeners(value = AuditingEntityListener.class)
-@DynamicUpdate
-@Transactional
+//@DynamicUpdate
+//@Transactional
 @Table(name = "MR_USER")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //
+    @Column(name = "id")
     private Long id; //pk
+
+    @Column(name = "username")
     private String username; //아이디
+
+    @Column(name = "password")
     private String password; //비밀번호
+
+    @Column(name = "name")
     private String name;    //이름
 
-    @Column(name = "BIRTH")
+    @Column(name = "birth")
     private Timestamp birth;     //생년월일
 
     @CreationTimestamp
-    @Column(name = "REGDATE")
-    private Timestamp regDate = new Timestamp(System.currentTimeMillis());
+    @Column(name = "regdate")
+    private Timestamp regDate = new Timestamp(System.currentTimeMillis());   //회원 가입 날짜
 
 }

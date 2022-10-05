@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum ErrorCode {
     NOT_FOUND(404,"USER-005", "존재하지 않는 회원입니다."),
     USERNAME_DUPLICATION(400,"USER-006","이미 사용중인 아이디입니다."),
-
+    PASSWORD_CHECK(400,"USER-006","잘못된 비밀번호입니다."),
     ;
 
     private int status;

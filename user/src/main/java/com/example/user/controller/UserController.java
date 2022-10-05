@@ -1,20 +1,18 @@
 package com.example.user.controller;
 
-import com.example.user.dto.ApiResponse;
-import com.example.user.dto.FindUserResponseDto;
-import com.example.user.dto.InputUserRequestDto;
-import com.example.user.dto.UpdateUserRequestDto;
+import com.example.user.dto.*;
 import com.example.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-
 @Api(tags = "User Controller", description ="회원 API Controller")
 @RequestMapping("/api/user")
 @RestController
@@ -22,7 +20,9 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    AuthenticationManager authenticationManager;
 
+    // 회원 등록
     @ApiOperation(value = "회원 등록", notes = "회원을 등록합니다.")
     @ApiImplicitParam(name = "inputUserRequestDto", value = "회원 등록 정보", required = true)
     @PostMapping("")
@@ -33,6 +33,8 @@ public class UserController {
     // 회원 전체 조회
     @ApiOperation(value = "회원 목록 전체 조회", notes = "전체 회원 정보를 조회합니다.")
     @GetMapping("")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')") //해당 메서드가 호출되기 이전에 권한을 검사
+    // hasAnyRole([role1, role2]) 현재 사용자의 권한이 파라미터의 권한 중 일치하는 것이 있는 경우 true 를 리턴
     public ApiResponse<List<FindUserResponseDto>> getUserAll(){
         return userService.getUserAll();
     }
@@ -41,10 +43,10 @@ public class UserController {
     @ApiOperation(value = "회원 상세 조회", notes = "회원 번호를 입력시 해당 회원의 상세 정보를 조회합니다.")
     @ApiImplicitParam(name="id", value="회원 번호", required = true)
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ApiResponse getUserOne(@PathVariable("id") Long id) {
         return userService.getUserOne(id);
     }
-
 
     // 회원 삭제
     @ApiOperation(value = "회원 삭제", notes = "회원 번호를 입력시 해당 회원의 정보를 삭제합니다.")
@@ -63,4 +65,12 @@ public class UserController {
     public ApiResponse modifyUser(@PathVariable Long id, @RequestBody @Valid UpdateUserRequestDto updateUserRequestDto) {
         return userService.modifyUser(id, updateUserRequestDto);
     }
+
+
+    @PostMapping("/login")
+    public ApiResponse login(@Valid @RequestBody LoginRequestDto loginRequest) {
+        return userService.loginUser(loginRequest);
+    }
+
+
 }
