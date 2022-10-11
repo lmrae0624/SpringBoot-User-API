@@ -6,6 +6,7 @@ import com.example.user.exception.UserException;
 import com.example.user.exception.common.ErrorCode;
 import com.example.user.repository.UserRepository;
 import com.example.user.response.ResponseUtil;
+import com.example.user.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
     //TokenProvider tokenProvider;
 
 
@@ -31,7 +33,7 @@ public class UserService {
 
         User user = User.builder()
                 .username(inputUserRequestDto.getUsername())
-                .password(passwordEncoder.encode(inputUserRequestDto.getPassword()))
+                .password(passwordEncoder.encode(inputUserRequestDto.getPassword())) //password 인코딩
                 .name(inputUserRequestDto.getName())
                 .birth(inputUserRequestDto.getBirth())
                 .build();
@@ -82,11 +84,14 @@ public class UserService {
             throw new UserException(ErrorCode.NOT_FOUND);
         }
 
+        //passwordEncoder.matches(rawPassword, encodedPassword)
         if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
             throw new UserException(ErrorCode.PASSWORD_CHECK);
         }
-        // new MemberLoginResponseDto(member.getId(), jwtTokenProvider.createToken(requestDto.getEmail()));
-        return null;//tokenProvider.createToken(loginRequest.getUsername()); //일치한다면 JWT 토큰을 만들어서 반환해준다.
+        String token = jwtTokenProvider.createJwtToken(user); //일치한다면 JWT 토큰을 만들어서 반환해준다.
+
+        return ResponseUtil.success(token);
     }
 
 }
+

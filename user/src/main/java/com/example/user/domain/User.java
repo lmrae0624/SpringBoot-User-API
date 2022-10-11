@@ -3,9 +3,12 @@ package com.example.user.domain;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 
 @Entity
 @Getter
@@ -17,7 +20,7 @@ import java.sql.Timestamp;
 //@DynamicUpdate
 //@Transactional
 @Table(name = "MR_USER")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //
     @Column(name = "id")
@@ -39,4 +42,29 @@ public class User {
     @Column(name = "regdate")
     private Timestamp regDate = new Timestamp(System.currentTimeMillis());   //회원 가입 날짜
 
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }

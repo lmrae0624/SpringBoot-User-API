@@ -1,0 +1,31 @@
+package com.example.user.security;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.GenericFilterBean;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
+//사용자 정의 필터
+//jwt인증 및 권한 처리 ( Jwt가 유효한 토큰인지 인증하기 위한 필터 )
+@RequiredArgsConstructor
+public class JwtAuthenticationFilter extends GenericFilterBean {
+    private final JwtTokenProvider jwtTokenProvider;
+
+    // Request로 들어오는 Jwt Token의 유효성을 검증하는 filter를 filterChain에 등록
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
+        if (token != null && jwtTokenProvider.validateToken(token)) {   // token 검증
+            Authentication auth = jwtTokenProvider.getAuthentication(token);    // 인증 객체 생성
+            SecurityContextHolder.getContext().setAuthentication(auth); // SecurityContextHolder에 인증 객체 저장
+        }
+        chain.doFilter(request, response);
+    }
+}
