@@ -1,6 +1,5 @@
 package com.example.user.dto;
 
-import com.example.user.domain.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -59,16 +58,5 @@ public class InputUserRequestDto {
     @CreatedDate
     private Timestamp regDate;   //가입날짜
 
-
-
-    public User toEntity() {
-        return User.builder()
-                .username(username)
-                .password(password)
-                .name(name)
-                .birth(birth)
-                .regDate(regDate)
-                .build();
-    }
 }
 
