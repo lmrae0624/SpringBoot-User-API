@@ -32,32 +32,33 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()   //rest api라 상태를 저장하지 않으니 CSRF 설정 Disable
-//                .exceptionHandling()
-//                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-//                .accessDeniedHandler(jwtAccessDeniedHandler)
+        http.cors().and().csrf().disable()
 
-//                .and()
                 .authorizeRequests()
-                .antMatchers("/*/users/login").permitAll()
-                .antMatchers(HttpMethod.POST,"/*/users").permitAll()
-                .anyRequest().hasRole("USER")
-                //.anyRequest().authenticated()
+                .antMatchers("/api/users/login").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/users").permitAll()
+                //.anyRequest().hasRole("USER")
+                .anyRequest().authenticated()
                 .and()
+
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //토큰을 활용하면 세션이 필요 없으므로 STATELESS로 설정하여 Session 사용 안함
                 .and()
+
                 .formLogin().disable()  //폼 로그인 방식 비활성화
+
+                //exceptionHandlerFilter -> JwtAuthenticationFilter -> UsernamePasswordAuthenticationFilter
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
-        //exceptionHandlerFilter -> JwtAuthenticationFilter -> UsernamePasswordAuthenticationFilter
         return http.build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         // swagger
-        return  (web) ->  web.ignoring().antMatchers("/v2/api-docs","/swagger-resources/**","/swagger-ui.html","/swagger/**");
+        return  (web) -> web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui",
+                "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**");
     }
 }
+
 
 

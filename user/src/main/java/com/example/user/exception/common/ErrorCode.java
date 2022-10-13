@@ -10,10 +10,12 @@ public enum ErrorCode {
     USERNAME_DUPLICATION(400,"USER-002","이미 사용중인 아이디입니다."),
     PASSWORD_CHECK(400,"USER-003","잘못된 비밀번호입니다."),
 
-    INVALID_SIGNATURE_TOKEN(403,"TOKEN-001","시그니처 검증에 실패한 토큰입니다."),
-    WRONG_TYPE_TOKEN(403,"TOKEN-002","잘못된 토큰입니다."),
-    EXPIRED_TOKEN(403,"TOKEN-003","만료된 토큰입니다."),
-    UNSUPPORTED_TOKEN(403,"TOKEN-004","지원하지 않는 토큰입니다.")
+    NOT_FOUND_TOKEN(401,"TOKEN-001","토큰을 찾을 수 없습니다"),
+    INVALID_SIGNATURE_TOKEN(401,"TOKEN-002","시그니처 검증에 실패한 토큰입니다."),
+    WRONG_TYPE_TOKEN(401,"TOKEN-003","잘못된 토큰입니다."),
+    EXPIRED_TOKEN(401,"TOKEN-004","만료된 토큰입니다."),
+    UNSUPPORTED_TOKEN(401,"TOKEN-005","지원하지 않는 토큰입니다.")
+
     ;
 
     private int status;

@@ -28,8 +28,8 @@ public class JwtTokenProvider {
     @Value("${jwt.expirations}")
     private long expirations;
 
-    @Value("${jwt.header}")
-    private String header;
+    @Value("${jwt.authorization}")
+    private String authorization;
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
 
@@ -41,20 +41,34 @@ public class JwtTokenProvider {
     }
 
     public String createJwtToken(User user) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("username", user.getUsername());
-        claims.put("role", user.getRole());
-
-        long now = (new Date()).getTime();
+        long now = (new Date()).getTime(); //현재
 
         return Jwts.builder()
                 .setSubject(user.getUsername())
-                .setClaims(claims)
-                .setExpiration(new Date(now + expirations)) //만료 시간
+                .setHeader(createHeader())
+                .setClaims(createClaims(user))
+                .setExpiration(new Date(now + expirations))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
+    private Map<String, Object> createHeader() {
+        Map<String, Object> header = new HashMap<>();
+
+        header.put("typ", "JWT");
+        header.put("alg", "HS256");
+
+        return header;
+    }
+
+    private Map<String, Object> createClaims(User user) {
+        Map<String, Object> claims = new HashMap<>();
+
+        claims.put("username", user.getUsername());
+        claims.put("roles", user.getRoles());
+
+        return claims;
+    }
 
     // Jwt 토큰 유효성 검사
     public boolean validateToken(String token) {
@@ -72,16 +86,16 @@ public class JwtTokenProvider {
         }
     }
 
-    // jwt에서 username 추출
+    // Jwt에서 username 추출
     private String getUsernameFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         return (String) claims.get("username");
     }
 
 
-    // jwt로 인증 정보 조회
+    // Jwt로 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        //이 메소드에서 DB로부터 회원정보를 가져와 있는 회원인지 아닌지 체크여부를 하는 중요한 메소드: loadUserByUsername 오버라이딩
+        //DB로부터 회원정보를 가져와 있는 회원인지 아닌지 체크
         UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(this.getUsernameFromToken(token));
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
@@ -90,7 +104,7 @@ public class JwtTokenProvider {
 
     //http request header에서 세팅된 token값
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader(header);
+        return request.getHeader(authorization);
     }
 
 }

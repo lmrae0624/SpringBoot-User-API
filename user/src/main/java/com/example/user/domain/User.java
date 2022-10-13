@@ -2,7 +2,9 @@ package com.example.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,17 +17,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@DynamicInsert
 @Entity
-@Getter
-@Setter
+@Getter @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@EntityListeners(value = AuditingEntityListener.class)
-//@DynamicUpdate
-//@Transactional
+@EntityListeners(value = AuditingEntityListener.class) //생성시간 자동 매핑
 @Table(name = "MR_USER")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -34,7 +35,6 @@ public class User implements UserDetails {
     @Column(name = "username")
     private String username; //아이디
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password")
     private String password; //비밀번호
 
@@ -48,15 +48,17 @@ public class User implements UserDetails {
     @Column(name = "regdate")
     private Timestamp regDate = new Timestamp(System.currentTimeMillis());   //회원 가입 날짜
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> role = new ArrayList<>();
+    @Column(name = "roles")
+    @ColumnDefault("ROLE_USER")
+    private List<String> roles = new ArrayList<>(); //권한
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.role.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
