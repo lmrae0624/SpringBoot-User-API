@@ -17,11 +17,7 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
 
-        if (token != null) {
-            if (JwtTokenProvider.validateToken(token)) {
-                return true;
-            }
-        }
-        return false;
+        return token != null && jwtTokenProvider.validateToken(token);
     }
+
 }

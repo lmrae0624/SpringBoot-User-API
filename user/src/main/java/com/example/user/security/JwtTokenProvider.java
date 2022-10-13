@@ -1,6 +1,7 @@
 package com.example.user.security;
 
 import com.example.user.domain.User;
+import com.example.user.exception.common.ErrorCode;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +23,13 @@ import java.util.Map;
 @Slf4j
 public class JwtTokenProvider {
     @Value("${jwt.secretKey}")
-    private static String secretKey;
+    private String secretKey;
 
-    @Value("${jwt.token-validity-in-seconds}")
-    private Long tokenValidityInMilliseconds;
+    @Value("${jwt.expirations}")
+    private long expirations;
+
+    @Value("${jwt.header}")
+    private String header;
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
 
@@ -36,39 +40,36 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-
     public String createJwtToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", user.getUsername());
+        claims.put("role", user.getRole());
 
         long now = (new Date()).getTime();
 
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .setClaims(claims)
-                .setExpiration(new Date(now + tokenValidityInMilliseconds)) //만료 시간
+                .setExpiration(new Date(now + expirations)) //만료 시간
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
 
     // Jwt 토큰 유효성 검사
-    public static boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (SignatureException ex) {
-            log.error("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            log.error("Invalid JWT token");
+            throw new JwtTokenException(ErrorCode.INVALID_SIGNATURE_TOKEN);
+        } catch (MalformedJwtException | IllegalArgumentException ex) {
+            throw new JwtTokenException(ErrorCode.WRONG_TYPE_TOKEN);
         } catch (ExpiredJwtException ex) {
-            log.error("Expired JWT token");
+            throw new JwtTokenException(ErrorCode.EXPIRED_TOKEN);
         } catch (UnsupportedJwtException ex) {
-            log.error("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            log.error("JWT claims string is empty.");
+            throw new JwtTokenException(ErrorCode.UNSUPPORTED_TOKEN);
         }
-        return false;
     }
 
     // jwt에서 username 추출
@@ -89,7 +90,7 @@ public class JwtTokenProvider {
 
     //http request header에서 세팅된 token값
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
+        return request.getHeader(header);
     }
 
 }

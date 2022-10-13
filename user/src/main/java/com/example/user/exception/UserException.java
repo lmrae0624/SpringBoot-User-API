@@ -7,20 +7,14 @@ import lombok.Getter;
 //@AllArgsConstructor
 public class UserException extends RuntimeException {
 
-    private ErrorCode errorCode;
+    private final ErrorCode ErrorCode;
 
-    public UserException(String message, ErrorCode errorCode) {
-        super(message);
-        this.errorCode = errorCode;
-    }
-
-    public UserException(ErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
+    public UserException(ErrorCode ErrorCode) {
+        super(ErrorCode.getMessage());
+        this.ErrorCode = ErrorCode;
     }
 
     public ErrorCode getErrorCode() {
-        return this.errorCode;
+        return this.ErrorCode;
     }
 }
-

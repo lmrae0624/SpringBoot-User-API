@@ -1,11 +1,5 @@
 server:
   port: 8080
-  servlet:
-    context-path: /
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
 
 spring:
   mvc:
@@ -40,6 +34,5 @@ logging:
 jwt:
   secretKey: SecretKeyTest
   header: Authorization # JWT를 검증하는데 필요한 정보
-  #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
-  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
-  token-validity-in-seconds: 86400 #토큰의 만료시간을 지정함 (단위는 초)
+  expirations: 86400 #토큰의 만료시간을 지정함 (단위는 초)
+
