@@ -3,6 +3,7 @@ package com.example.user.config;
 import com.example.user.security.ExceptionHandlerFilter;
 import com.example.user.security.JwtAuthenticationFilter;
 import com.example.user.security.JwtTokenProvider;
+import com.example.user.security.exception.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 
     @Bean
@@ -37,14 +39,21 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/users/login").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/users").permitAll()
-                //.anyRequest().hasRole("USER")
                 .anyRequest().authenticated()
+                //.anyRequest().hasRole("USER")
                 .and()
 
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //토큰을 활용하면 세션이 필요 없으므로 STATELESS로 설정하여 Session 사용 안함
+                //토큰을 활용하면 세션이 필요 없으므로 STATELESS로 설정하여 Session 사용 안함
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 
-                .formLogin().disable()  //폼 로그인 방식 비활성화
+                //폼 로그인 방식 비활성화
+                .formLogin().disable()
+
+                // exception Handling
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint) //인증 실패 시
+                .and()
 
                 //exceptionHandlerFilter -> JwtAuthenticationFilter -> UsernamePasswordAuthenticationFilter
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)

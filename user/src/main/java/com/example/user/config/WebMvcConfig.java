@@ -16,7 +16,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtTokenInterceptor)
                 // 해당 url에 대해 토큰 검사 진행
-                .addPathPatterns("/api/users");
+                .addPathPatterns("/api/users")
+                .excludePathPatterns("/api/users/login");
+
     }
 
 

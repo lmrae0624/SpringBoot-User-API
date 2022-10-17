@@ -1,6 +1,7 @@
 package com.example.user.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -15,7 +16,12 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (HttpMethod.POST.matches(request.getMethod())) {
+            return true;
+        }
+
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
+
 
         return token != null && jwtTokenProvider.validateToken(token);
     }
