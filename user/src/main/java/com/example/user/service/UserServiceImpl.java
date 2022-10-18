@@ -31,6 +31,9 @@ public class UserServiceImpl implements UserService{
             throw new UserException(ErrorCode.USERNAME_DUPLICATION);
         }
 
+        String encodePassword = passwordEncoder.encode(inputUserRequestDto.getPassword());
+        inputUserRequestDto.setPassword(encodePassword);
+
         User user = UserMapper.instance.inputUserRequestDtoToEntity(inputUserRequestDto);
 
         return ResponseUtil.success(userRepository.save(user));

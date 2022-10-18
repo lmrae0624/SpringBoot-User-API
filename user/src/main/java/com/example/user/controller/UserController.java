@@ -2,7 +2,7 @@ package com.example.user.controller;
 
 import com.example.user.domain.User;
 import com.example.user.dto.*;
-import com.example.user.service.UserServiceImpl;
+import com.example.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -20,21 +20,21 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
     // 회원 등록
     @ApiOperation(value = "회원 등록", notes = "회원을 등록합니다.")
     @ApiImplicitParam(name = "inputUserRequestDto", value = "회원 등록 정보", required = true)
     @PostMapping("")
     public ApiResponse<User> addUser(@RequestBody @Valid InputUserRequestDto inputUserRequestDto)  {
-        return userServiceImpl.addUser(inputUserRequestDto);
+        return userService.addUser(inputUserRequestDto);
     }
 
     // 회원 전체 조회
     @ApiOperation(value = "회원 목록 전체 조회", notes = "전체 회원 정보를 조회합니다.")
     @GetMapping("")
     public ApiResponse<List<FindUserResponseDto>> getUserAll(){
-        return userServiceImpl.getUserAll();
+        return userService.getUserAll();
     }
 
     // 회원 개별 조회
@@ -42,7 +42,7 @@ public class UserController {
     @ApiImplicitParam(name="id", value="회원 번호", required = true)
     @GetMapping("/{id}")
     public ApiResponse<FindUserResponseDto> getUserOne(@PathVariable("id") Long id) {
-        return userServiceImpl.getUserOne(id);
+        return userService.getUserOne(id);
     }
 
     // 회원 삭제
@@ -50,7 +50,7 @@ public class UserController {
     @ApiImplicitParam(name="id", value="회원 번호", required = true)
     @DeleteMapping("/{id}")
     public ApiResponse<String> deleteUser(@PathVariable Long id) {
-        return userServiceImpl.deleteUser(id);
+        return userService.deleteUser(id);
     }
 
     // 회원 수정
@@ -60,7 +60,7 @@ public class UserController {
             @ApiImplicitParam(name = "updateUserRequestDto", value = "회원 수정 정보", required = true)})
     @PutMapping("/{id}")
     public ApiResponse<FindUserResponseDto> modifyUser(@PathVariable Long id, @RequestBody @Valid UpdateUserRequestDto updateUserRequestDto) {
-        return userServiceImpl.modifyUser(id, updateUserRequestDto);
+        return userService.modifyUser(id, updateUserRequestDto);
     }
 
     // 로그인
@@ -69,7 +69,7 @@ public class UserController {
     @PostMapping("/login")
     @Transactional
     public ApiResponse<LoginResponseDto> loginUser(@RequestBody @Valid LoginRequestDto loginRequest) {
-        return userServiceImpl.loginUser(loginRequest);
+        return userService.loginUser(loginRequest);
     }
 
 }
