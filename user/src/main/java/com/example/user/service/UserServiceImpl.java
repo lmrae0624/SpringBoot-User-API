@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService{
 
 
     // 회원 등록
-    public ApiResponse<User> addUser(InputUserRequestDto inputUserRequestDto) {
+    public ApiResponse<FindUserResponseDto> addUser(InputUserRequestDto inputUserRequestDto) {
         // 아이디 중복 검사
         if(userRepository.existsByUsername(inputUserRequestDto.getUsername())){
             throw new UserException(ErrorCode.USERNAME_DUPLICATION);
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService{
 
         User user = UserMapper.instance.inputUserRequestDtoToEntity(inputUserRequestDto);
 
-        return ResponseUtil.success(userRepository.save(user));
+        return ResponseUtil.success(new FindUserResponseDto(userRepository.save(user)));
     }
 
     // 회원 전체 조회

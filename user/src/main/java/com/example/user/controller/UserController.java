@@ -1,6 +1,5 @@
 package com.example.user.controller;
 
-import com.example.user.domain.User;
 import com.example.user.dto.*;
 import com.example.user.service.UserService;
 import io.swagger.annotations.Api;
@@ -26,7 +25,7 @@ public class UserController {
     @ApiOperation(value = "회원 등록", notes = "회원을 등록합니다.")
     @ApiImplicitParam(name = "inputUserRequestDto", value = "회원 등록 정보", required = true)
     @PostMapping("")
-    public ApiResponse<User> addUser(@RequestBody @Valid InputUserRequestDto inputUserRequestDto)  {
+    public ApiResponse<FindUserResponseDto> addUser(@RequestBody @Valid InputUserRequestDto inputUserRequestDto)  {
         return userService.addUser(inputUserRequestDto);
     }
 
