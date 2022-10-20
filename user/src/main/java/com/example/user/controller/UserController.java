@@ -4,7 +4,6 @@ import com.example.user.dto.*;
 import com.example.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +22,11 @@ public class UserController {
 
     // 회원 등록
     @ApiOperation(value = "회원 등록", notes = "회원을 등록합니다.")
-    @ApiImplicitParam(name = "inputUserRequestDto", value = "회원 등록 정보", required = true)
     @PostMapping("")
     public ApiResponse<FindUserResponseDto> addUser(@RequestBody @Valid InputUserRequestDto inputUserRequestDto)  {
         return userService.addUser(inputUserRequestDto);
     }
 
-    // 회원 전체 조회
     @ApiOperation(value = "회원 목록 전체 조회", notes = "전체 회원 정보를 조회합니다.")
     @GetMapping("")
     public ApiResponse<List<FindUserResponseDto>> getUserAll(){
@@ -54,9 +51,7 @@ public class UserController {
 
     // 회원 수정
     @ApiOperation(value = "회원 수정", notes = "회원 번호를 입력시 해당 회원의 정보를 수정합니다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="id", value="회원 번호", required = true),
-            @ApiImplicitParam(name = "updateUserRequestDto", value = "회원 수정 정보", required = true)})
+    @ApiImplicitParam(name="id", value="회원 번호", required = true)
     @PutMapping("/{id}")
     public ApiResponse<FindUserResponseDto> modifyUser(@PathVariable Long id, @RequestBody @Valid UpdateUserRequestDto updateUserRequestDto) {
         return userService.modifyUser(id, updateUserRequestDto);
@@ -64,11 +59,11 @@ public class UserController {
 
     // 로그인
     @ApiOperation(value = "로그인", notes = "회원 아이디와 비밀번호 입력 시 로그인합니다.")
-    @ApiImplicitParam(name = "loginRequest", value = "회원 로그인 정보", required = true)
     @PostMapping("/login")
     @Transactional
     public ApiResponse<LoginResponseDto> loginUser(@RequestBody @Valid LoginRequestDto loginRequest) {
         return userService.loginUser(loginRequest);
     }
+
 
 }

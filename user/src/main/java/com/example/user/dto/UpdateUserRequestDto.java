@@ -11,7 +11,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
-@ApiModel(value="회원 정보", description = "회원 수정이 가능한 정보입니다.")
+
+@ApiModel(description = "회원 수정이 가능한 정보입니다.")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -34,7 +35,7 @@ public class UpdateUserRequestDto {
 
     @ApiModelProperty(
             value = "생년월일",
-            dataType = "Date",
+            dataType = "Timestamp",
             example = "1900-01-01")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Timestamp birth;   //생년월일

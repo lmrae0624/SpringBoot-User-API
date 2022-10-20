@@ -6,8 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Date;
 @Getter
 public class FindUserResponseDto {
 
@@ -39,16 +37,17 @@ public class FindUserResponseDto {
             value = "생년월일",
             dataType = "Date",
             example = "1900-01-01")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="Asia/Seoul")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Timestamp birth;   //생년월일
 
     @ApiModelProperty(
             value = "가입날짜",
             dataType = "Date",
-            example = "2000-01-01",
+            example = "2000-01-01 00:00:00",
             required = true)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp regDate;   //회원 가입 날짜
+
 
     public FindUserResponseDto(User user){
         this.id = user.getId();
