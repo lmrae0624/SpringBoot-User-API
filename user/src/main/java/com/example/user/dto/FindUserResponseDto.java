@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
 import java.sql.Timestamp;
+
 @Getter
 public class FindUserResponseDto {
 
@@ -15,29 +16,32 @@ public class FindUserResponseDto {
             example = "1",
             required = true)
     private Long id;    //pk
+
     @ApiModelProperty(
             value = "아이디",
             dataType = "String",
             example = "gildong123",
             required = true)
     private String username; //아이디
+
     @ApiModelProperty(
             value = "비밀번호",
             dataType = "String",
             example = "password123",
             required = true)
     private String password; //비밀번호
+
     @ApiModelProperty(
             value = "이름",
             dataType = "String",
             example = "홍길동",
             required = true)
     private String name;    //이름
+
     @ApiModelProperty(
             value = "생년월일",
             dataType = "Date",
-            example = "1900-01-01")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+            example = "2000-01-01 00:00:00")
     private Timestamp birth;   //생년월일
 
     @ApiModelProperty(

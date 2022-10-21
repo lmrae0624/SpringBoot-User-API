@@ -4,7 +4,6 @@ import com.example.user.domain.User;
 import com.example.user.exception.common.ErrorCode;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,16 +19,15 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class JwtTokenProvider {
     @Value("${jwt.secretKey}")
-    private String secretKey;
+    private String secretKey; //SecretKeyTest
 
     @Value("${jwt.expirations}")
-    private long expirations;
+    private long expirations; //86400
 
     @Value("${jwt.authorization}")
-    private String authorization;
+    private String authorization; //Authorization
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
 
@@ -40,6 +38,7 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
+    // 토큰 생성
     public String createJwtToken(User user) {
         long now = (new Date()).getTime(); //현재
 
@@ -52,6 +51,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    //header
     private Map<String, Object> createHeader() {
         Map<String, Object> header = new HashMap<>();
 
@@ -61,10 +61,11 @@ public class JwtTokenProvider {
         return header;
     }
 
+    //claim
     private Map<String, Object> createClaims(User user) {
         Map<String, Object> claims = new HashMap<>();
 
-        claims.put("username", user.getUsername());
+        claims.put("id", user.getId());
         claims.put("roles", user.getRoles());
 
         return claims;
@@ -86,17 +87,17 @@ public class JwtTokenProvider {
         }
     }
 
-    // Jwt에서 username 추출
-    private String getUsernameFromToken(String token) {
+    // Jwt에서 user id(pk) 추출
+    private String getUserIdFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        return (String) claims.get("username");
+        return String.valueOf(claims.get("id"));
     }
 
 
     // Jwt로 인증 정보 조회
     public Authentication getAuthentication(String token) {
         //DB로부터 회원정보를 가져와 있는 회원인지 아닌지 체크
-        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(this.getUsernameFromToken(token));
+        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(this.getUserIdFromToken(token));
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }

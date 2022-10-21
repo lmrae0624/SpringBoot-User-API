@@ -32,20 +32,20 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Long id; //pk
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, length = 30)
     private String username; //아이디
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false, length = 30)
     private String password; //비밀번호
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 30)
     private String name;    //이름
 
-    @Column(name = "birth")
+    @Column(name = "birth", length = 30)
     private Timestamp birth;     //생년월일
 
     @CreationTimestamp
-    @Column(name = "regdate")
+    @Column(name = "regdate", nullable = false, length = 15)
     private Timestamp regDate = new Timestamp(System.currentTimeMillis());   //회원 가입 날짜
 
     @ElementCollection(fetch = FetchType.EAGER)

@@ -13,6 +13,7 @@ import java.io.IOException;
 
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    //인증 실패 시 exception
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         throw new JwtTokenException(ErrorCode.NOT_PERMISSION);

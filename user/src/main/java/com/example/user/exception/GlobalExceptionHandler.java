@@ -1,6 +1,7 @@
 package com.example.user.exception;
 
 import com.example.user.exception.common.ErrorResponse;
+import com.example.user.response.ResponseUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserException.class)
     public ErrorResponse ExceptionController(UserException e) {
-        return new ErrorResponse(e.getErrorCode().getStatus(), e.getErrorCode().getCode(), e.getErrorCode().getMessage());
+        return ResponseUtil.fail(e);
     }
+
 
     // Validation Exception
     @Override
